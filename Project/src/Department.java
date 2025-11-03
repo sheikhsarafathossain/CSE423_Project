@@ -1,5 +1,3 @@
-package studentinformationsystem;
-
 public class Department {
 
     private String departmentName;

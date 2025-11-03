@@ -1,15 +1,15 @@
-package studentinformationsystem;
-
 import java.util.ArrayList;
 
 class Faculty extends Person {
 
     private String facultyPosition;
-    private ArrayList<Course> CourseList = new ArrayList<Course>();
-    private int numberOfCourses = 0;
+    // private ArrayList<Course> CourseList = new ArrayList<Course>();
+    // private int numberOfCourses = 0;
     private ArrayList<Club> clubList = new ArrayList<Club>();
     private ArrayList<Department> departmentList = new ArrayList<Department>();
     private int numberOfClubs = 0;
+
+    private CourseManager courseManager;
 
     public Faculty() {
     }
@@ -17,6 +17,7 @@ class Faculty extends Person {
     public Faculty(int id, String name, String email, String facultyPosition) {
         super(id, name, email);
         this.facultyPosition = facultyPosition;
+        this.courseManager = new CourseManager();
     }
 
     public String getFacultyPosition() {
@@ -31,24 +32,16 @@ class Faculty extends Person {
         this.departmentList = departmentList;
     }
 
+    public CourseManager getCourseManager() {
+        return courseManager;
+    }
+
+    public void setCourseManager(CourseManager courseManager) {
+        this.courseManager = courseManager;
+    }
+
     public void setFacultyPosition(String facultyPosition) {
         this.facultyPosition = facultyPosition;
-    }
-
-    public ArrayList<Course> getCourseList() {
-        return CourseList;
-    }
-
-    public void setCourseList(ArrayList<Course> CourseList) {
-        this.CourseList = CourseList;
-    }
-
-    public int getNumberOfCourses() {
-        return numberOfCourses;
-    }
-
-    public void setNumberOfCourse(int numberOfCourses) {
-        this.numberOfCourses = numberOfCourses;
     }
 
     public ArrayList<Club> getClubList() {
@@ -79,9 +72,8 @@ class Faculty extends Person {
     }
 
     public void addCourse(Course c) {
-        if (numberOfCourses <= 3) {
-            CourseList.add(c);
-            numberOfCourses++;
+        if (this.courseManager.getNumberOfCourses() <= 3) {
+            this.courseManager.addCourse(c);
         } else {
             System.out.println("Course capacity reached maximum number.\n"
                     + "Cant add more");
@@ -89,18 +81,11 @@ class Faculty extends Person {
     }
 
     public void dropCourse(String courseId) {
-        for (Course c : CourseList) {
-            if (c.getCourseId() == courseId) {
-                CourseList.remove(c);
-                numberOfCourses--;
-            }
-        }
+        this.courseManager.dropCourse(courseId);
     }
 
     public void displayAssignCourse() {
-        for (Course c : CourseList) {
-            c.display();
-        }
+        this.courseManager.displayAssignCourse();
     }
 
     public void addClub(Club c) {

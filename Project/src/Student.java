@@ -1,12 +1,10 @@
-package studentinformationsystem;
-
 import java.util.ArrayList;
 
 class Student extends Person {
 
     private double studentCGPA;
-    private ArrayList<Course> courseList = new ArrayList<Course>();
-    private int numberOfCourses = 0;
+    
+    private CourseManager courseManager;
     private ArrayList<ExamResult> resultList = new ArrayList<ExamResult>();
     private ArrayList<Club> clubList = new ArrayList<Club>();
     private int numberOfClubs = 0;
@@ -26,6 +24,7 @@ class Student extends Person {
     public Student(int id, String name, String email, double studentCGPA) {
         super(id, name, email);
         this.studentCGPA = studentCGPA;
+        this.courseManager = new CourseManager();
     }
 
     public double getStudentCGPA() {
@@ -36,21 +35,14 @@ class Student extends Person {
         this.studentCGPA = studentCGPA;
     }
 
-    public ArrayList<Course> getCourseList() {
-        return courseList;
+    public CourseManager getCourseManager() {
+        return courseManager;
     }
 
-    public void setCourseList(ArrayList<Course> courseList) {
-        this.courseList = courseList;
+    public void setCourseManager(CourseManager courseManager) {
+        this.courseManager = courseManager;
     }
 
-    public int getNumberOfCourses() {
-        return numberOfCourses;
-    }
-
-    public void setNumberOfCourse(int numberOfCourses) {
-        this.numberOfCourses = numberOfCourses;
-    }
 
     public ArrayList<ExamResult> getResultList() {
         return resultList;
@@ -81,31 +73,22 @@ class Student extends Person {
         System.out.println("Student Id: " + getId());
         System.out.println("Student Name: " + getName());
         System.out.println("Student Email: " + getEmail());
-        System.out.println("Student CGPA: " + getStudentCGPA());
-              
+        System.out.println("Student CGPA: " + getStudentCGPA());  //Dependency Inversion Principles
     }
     
+
     public void displayAssignCourse(){
-        for(Course c: courseList){
-            c.display();
-        }
+        this.courseManager.displayAssignCourse();
     }
 
     public void addCourse(Course course) {
-        courseList.add(course);
-        numberOfCourses++;
+        this.courseManager.addCourse(course);
     }
 
     public void dropCourse(String coursedrop) {
-        int i;
-        for (i = 0; i < courseList.size(); i++) {
-            if (courseList.get(i).getCourseId().equals(coursedrop)) {
-                courseList.remove(i);
-                numberOfCourses--;
-                break;
-            }
-        }
+        this.courseManager.dropCourse(coursedrop);
     }
+    
     
     public void addExamMarks(ExamResult er){
         resultList.add(er);

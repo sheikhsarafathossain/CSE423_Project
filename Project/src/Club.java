@@ -1,7 +1,4 @@
-package studentinformationsystem;
-
-
-public class Club {
+public class Club { 
 
     private String clubName, clubPosition;
 

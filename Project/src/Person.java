@@ -1,11 +1,9 @@
- package studentinformationsystem;
-
 abstract class Person {
 
     private int id;
     private String name, email;
 
-    public Person() {
+    public Person() { // Open-Closed Principles, Liskov Substitution Principles
     }
 
     public Person(int id, String name, String email) {
@@ -38,8 +36,6 @@ abstract class Person {
         this.email = email;
     }
 
-    public void display() {
-        System.out.println("");
-    }
+    public abstract void  display(); //Dependency Inversion Principles
 
 }
