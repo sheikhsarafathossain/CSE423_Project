@@ -4,103 +4,72 @@ public class Course {
 
     private String courseId, courseTitle;
     private double credit;
+    private int capacity; // OCP FIX: Capacity is now variable, not hardcoded
+    
     private ArrayList<Student> studentList = new ArrayList<Student>();
     private ArrayList<ExamResult> resultList = new ArrayList<ExamResult>();
-    private int numberOfStudent = 0;
+    
+    // Redundant counter 'numberOfStudent' removed. We will use studentList.size()
+    
     private Faculty faculty;
 
     public Course() {
     }
 
-    public Course(String courseId, String courseTitle, double credit) {
+    // Updated Constructor to accept capacity
+    public Course(String courseId, String courseTitle, double credit, int capacity) {
         this.courseId = courseId;
         this.courseTitle = courseTitle;
         this.credit = credit;
+        this.capacity = capacity;
     }
 
-    public String getCourseId() {
-        return courseId;
-    }
+    // --- Getters and Setters ---
+    public String getCourseId() { return courseId; }
+    public void setCourseId(String courseId) { this.courseId = courseId; }
 
-    public void setCourseId(String courseId) {
-        this.courseId = courseId;
-    }
+    public String getCourseTitle() { return courseTitle; }
+    public void setCourseTitle(String courseTitle) { this.courseTitle = courseTitle; }
 
-    public String getCourseTitle() {
-        return courseTitle;
-    }
+    public double getCredit() { return credit; }
+    public void setCredit(double credit) { this.credit = credit; }
+    
+    public int getCapacity() { return capacity; }
+    public void setCapacity(int capacity) { this.capacity = capacity; }
 
-    public void setCourseTitle(String courseTitle) {
-        this.courseTitle = courseTitle;
-    }
+    public ArrayList<Student> getStudentList() { return studentList; }
+    public void setStudentList(ArrayList<Student> studentList) { this.studentList = studentList; }
 
-    public double getCredit() {
-        return credit;
-    }
+    // Dynamic getter instead of manual counter
+    public int getNumberOfStudent() { return studentList.size(); }
 
-    public void setCredit(double credit) {
-        this.credit = credit;
-    }
+    public Faculty getFaculty() { return faculty; }
+    public void setFaculty(Faculty faculty) { this.faculty = faculty; }
 
-    public ArrayList<Student> getStudentList() {
-        return studentList;
-    }
-
-    public void setStudentList(ArrayList<Student> studentList) {
-        this.studentList = studentList;
-    }
-
-    public int getNumberOfStudent() {
-        return numberOfStudent;
-    }
-
-    public Faculty getFaculty() {
-        return faculty;
-    }
-
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
-    }
-
-    public void display() {
-        System.out.println("Course Id: " + courseId);
-        System.out.println("Course Title : " + courseTitle);
-        System.out.println("Course Credit : " + credit);
-    }
+    // --- Data Logic ---
 
     public void addStudent(Student s) {
-        if (numberOfStudent <= 40) {
+        // OCP FIX: Checks against the specific capacity of this course instance
+        if (studentList.size() < capacity) {
             studentList.add(s);
-            numberOfStudent++;
         } else {
-            System.out.println("Student capacity reached maximum number.\n"
-                    + "Cant add more");
+             System.out.println("Course Capacity Full (" + capacity + ")");
         }
     }
 
     public void dropStudent(int studentId) {
-        int i;
-        for (i = 0; i < studentList.size(); i++) {
+        for (int i = 0; i < studentList.size(); i++) {
             if (studentList.get(i).getId() == studentId){
                 studentList.remove(i);
-                numberOfStudent--;
                 break;
             }
-
         }
-
     }
     
     public void addMarks(ExamResult e){
         resultList.add(e);
     }
     
-    public void printMarks(){
-        for(ExamResult i : resultList){
-            i.display();
-        }
-    }
-
     public void addFaculty(Faculty faculty) {
         this.faculty = faculty;
     }
@@ -108,11 +77,4 @@ public class Course {
     public void dropFaculty() {
         this.faculty = null;
     }
-    
-    public void printStudentList(){
-        for(Student s: studentList){
-            s.display();
-        }
-    }
-
 }

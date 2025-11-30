@@ -1,31 +1,25 @@
 import java.util.ArrayList;
 
-class Student extends Person {
+public class Student extends Person {
 
     private double studentCGPA;
+    private CourseManager courseManager; 
     
-    private CourseManager courseManager;
     private ArrayList<ExamResult> resultList = new ArrayList<ExamResult>();
     private ArrayList<Club> clubList = new ArrayList<Club>();
-    private int numberOfClubs = 0;
+    // REMOVED: private int numberOfClubs = 0; (Redundant)
     private ArrayList<Department> departmentList = new ArrayList<Department>();
-
-    public ArrayList<Department> getDepartmentList() {
-        return departmentList;
-    }
-
-    public void setDepartmentList(ArrayList<Department> departmentList) {
-        this.departmentList = departmentList;
-    }
 
     public Student() {
     }
 
-    public Student(int id, String name, String email, double studentCGPA) {
+    public Student(int id, String name, String email, double studentCGPA, CourseManager cm) {
         super(id, name, email);
         this.studentCGPA = studentCGPA;
-        this.courseManager = new CourseManager();
+        this.courseManager = cm; 
     }
+
+    // --- Getters and Setters ---
 
     public double getStudentCGPA() {
         return studentCGPA;
@@ -43,7 +37,6 @@ class Student extends Person {
         this.courseManager = courseManager;
     }
 
-
     public ArrayList<ExamResult> getResultList() {
         return resultList;
     }
@@ -60,68 +53,41 @@ class Student extends Person {
         this.clubList = clubList;
     }
 
+    // Fix: Dynamic calculation ensures data integrity
     public int getNumberOfClubs() {
-        return numberOfClubs;
-    }
-
-    public void setNumberOfClubs(int numberOfClubs) {
-        this.numberOfClubs = numberOfClubs;
-    }
-
-    @Override
-    public void display() {
-        System.out.println("Student Id: " + getId());
-        System.out.println("Student Name: " + getName());
-        System.out.println("Student Email: " + getEmail());
-        System.out.println("Student CGPA: " + getStudentCGPA());  //Dependency Inversion Principles
+        return clubList.size();
     }
     
+    // Setter for number is removed as it's calculated automatically
 
-    public void displayAssignCourse(){
-        this.courseManager.displayAssignCourse();
+    public ArrayList<Department> getDepartmentList() {
+        return departmentList;
     }
 
+    public void setDepartmentList(ArrayList<Department> departmentList) {
+        this.departmentList = departmentList;
+    }
+
+    // --- Data Logic Methods ---
+
     public void addCourse(Course course) {
-        this.courseManager.addCourse(course);
+        this.courseManager.enrollCourse(course);
     }
 
     public void dropCourse(String coursedrop) {
         this.courseManager.dropCourse(coursedrop);
     }
     
-    
     public void addExamMarks(ExamResult er){
         resultList.add(er);
     }
     
-    public void displayAssignExamResult(){
-        for(ExamResult er: resultList){
-            er.display();
-        }
-    }
-    
     public void addClub(Club c) {
         clubList.add(c);
-        numberOfClubs++;
-
-    }
-    
-    public void displayAssignClub() {
-        for (Club c : clubList) {
-            c.display();
-        }
+        // Removed numberOfClubs++
     }
     
     public void addDepartment(Department d ){
         departmentList.add(d);
     }
-    
-    public void displayAssignDepartment() {
-        for (Department d : departmentList) {
-            d.display();
-        }
-    }
-    
-    
-
 }

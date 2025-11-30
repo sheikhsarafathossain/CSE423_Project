@@ -27,11 +27,5 @@ public class Department {
         this.departmentTotalCredit = departmentTotalCredit;
     }
 
-    public void display() {
-        System.out.println("Department Name: " + departmentName);
-        System.out.println("Department Total Credit: " + departmentTotalCredit);
-        
-
-    }
-
+    // display() is DELETED
 }

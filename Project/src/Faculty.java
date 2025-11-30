@@ -1,35 +1,41 @@
 import java.util.ArrayList;
 
-class Faculty extends Person {
+public class Faculty extends Person {
 
     private String facultyPosition;
-    // private ArrayList<Course> CourseList = new ArrayList<Course>();
-    // private int numberOfCourses = 0;
+    private int maxCourseLoad; 
+    private CourseManager courseManager;
+
     private ArrayList<Club> clubList = new ArrayList<Club>();
     private ArrayList<Department> departmentList = new ArrayList<Department>();
-    private int numberOfClubs = 0;
-
-    private CourseManager courseManager;
+    // REMOVED: private int numberOfClubs = 0; (Redundant)
 
     public Faculty() {
     }
 
-    public Faculty(int id, String name, String email, String facultyPosition) {
+    public Faculty(int id, String name, String email, String facultyPosition, int maxCourseLoad, CourseManager cm) {
         super(id, name, email);
         this.facultyPosition = facultyPosition;
-        this.courseManager = new CourseManager();
+        this.maxCourseLoad = maxCourseLoad;
+        this.courseManager = cm; 
     }
+
+    // --- Getters and Setters ---
 
     public String getFacultyPosition() {
         return facultyPosition;
     }
 
-    public ArrayList<Department> getDepartmentList() {
-        return departmentList;
+    public void setFacultyPosition(String facultyPosition) {
+        this.facultyPosition = facultyPosition;
     }
 
-    public void setDepartmentList(ArrayList<Department> departmentList) {
-        this.departmentList = departmentList;
+    public int getMaxCourseLoad() {
+        return maxCourseLoad;
+    }
+
+    public void setMaxCourseLoad(int maxCourseLoad) {
+        this.maxCourseLoad = maxCourseLoad;
     }
 
     public CourseManager getCourseManager() {
@@ -40,8 +46,12 @@ class Faculty extends Person {
         this.courseManager = courseManager;
     }
 
-    public void setFacultyPosition(String facultyPosition) {
-        this.facultyPosition = facultyPosition;
+    public ArrayList<Department> getDepartmentList() {
+        return departmentList;
+    }
+
+    public void setDepartmentList(ArrayList<Department> departmentList) {
+        this.departmentList = departmentList;
     }
 
     public ArrayList<Club> getClubList() {
@@ -52,72 +62,41 @@ class Faculty extends Person {
         this.clubList = clubList;
     }
 
+    // Fix: Dynamic calculation
     public int getNumberOfClubs() {
-        return numberOfClubs;
+        return clubList.size();
     }
-
-    public void setNumberOfClubs(int numberOfClubs) {
-        this.numberOfClubs = numberOfClubs;
-    }
-
     
-    @Override
-    public void display() {
-        System.out.println("Faculty Id: " + getId()); 
-        System.out.println("Faculty Name: " + getName());
-        System.out.println("Faculty Email: " + getEmail());
-        System.out.println("Faculty Position: " + facultyPosition);
-               
+    // Setter removed
 
-    }
+    // --- Data Logic Methods ---
 
     public void addCourse(Course c) {
-        if (this.courseManager.getNumberOfCourses() <= 3) {
-            this.courseManager.addCourse(c);
+        if (this.courseManager.getNumberOfCourses() < maxCourseLoad) {
+            this.courseManager.assignCourse(c);
         } else {
-            System.out.println("Course capacity reached maximum number.\n"
-                    + "Cant add more");
+            System.out.println("Course capacity reached maximum number.");
         }
     }
 
     public void dropCourse(String courseId) {
-        this.courseManager.dropCourse(courseId);
-    }
-
-    public void displayAssignCourse() {
-        this.courseManager.displayAssignCourse();
+        this.courseManager.withdrawCourse(courseId);
     }
 
     public void addClub(Club c) {
-
         clubList.add(c);
-        numberOfClubs++;
-
     }
 
     public void dropClub(String clubName) {
-        for (Club c : clubList) {
-            if (c.getClubName() == clubName) {
-                clubList.remove(c);
-                numberOfClubs++;
+        for (int i = 0; i < clubList.size(); i++) {
+             if (clubList.get(i).getClubName().equals(clubName)) {
+                clubList.remove(i);
+                break;
             }
-        }
-    }
-
-    public void displayAssignClub() {
-        for (Club c : clubList) {
-            c.display();
         }
     }
     
     public void addDepartment(Department d ){
         departmentList.add(d);
     }
-    
-    public void displayAssignDepartment() {
-        for (Department d : departmentList) {
-            d.display();
-        }
-    }
-
 }

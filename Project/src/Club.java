@@ -15,7 +15,6 @@ public class Club {
     }
 
     public void setClubName(String clubName) {
-
         this.clubName = clubName;
     }
 
@@ -24,13 +23,6 @@ public class Club {
     }
 
     public void setClubPosition(String clubPosition) {
-
         this.clubPosition = clubPosition;
     }
-
-    public void display() {
-        System.out.println("Club Name: " + clubName);
-        System.out.println("Club Position: " + clubPosition);
-    }
-
 }

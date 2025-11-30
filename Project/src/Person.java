@@ -3,7 +3,8 @@ abstract class Person {
     private int id;
     private String name, email;
 
-    public Person() { // Open-Closed Principles, Liskov Substitution Principles
+    public Person() {
+         
     }
 
     public Person(int id, String name, String email) {
@@ -36,6 +37,5 @@ abstract class Person {
         this.email = email;
     }
 
-    public abstract void  display(); //Dependency Inversion Principles
 
 }
