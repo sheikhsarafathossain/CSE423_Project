@@ -1,31 +1,29 @@
 public class Department {
 
-    private String departmentName;
-    private double departmentTotalCredit;
+    private String name;
+    private double totalCredit;
 
     public Department() {
     }
 
-    public Department(String departmentName, double departmentTotalCredit) {
-        this.departmentName = departmentName;
-        this.departmentTotalCredit = departmentTotalCredit;
+    public Department(String name, double totalCredit) {
+        this.name = name;
+        this.totalCredit = totalCredit;
     }
 
-    public String getDepartmentName() {
-        return departmentName;
+    public String getName() {
+        return name;
     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public double getDepartmentTotalCredit() {
-        return departmentTotalCredit;
+    public double getTotalCredit() {
+        return totalCredit;
     }
 
-    public void setDepartmentTotalCredit(double departmentTotalCredit) {
-        this.departmentTotalCredit = departmentTotalCredit;
+    public void setTotalCredit(double totalCredit) {
+        this.totalCredit = totalCredit;
     }
-
-    // display() is DELETED
 }

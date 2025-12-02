@@ -1,18 +1,31 @@
+import java.util.List;
 import java.util.ArrayList;
 
 public class UniversityData {
     
-    // These lists used to be inside your Main method
-    private ArrayList<Student> studentList = new ArrayList<>();
-    private ArrayList<Faculty> facultyList = new ArrayList<>();
-    private ArrayList<Course> courseList = new ArrayList<>();
-    private ArrayList<Club> clubList = new ArrayList<>();
-    private ArrayList<Department> departmentList = new ArrayList<>();
+    private List<Student> studentList = new ArrayList<>();
+    private List<Faculty> facultyList = new ArrayList<>();
+    private List<Course> courseList = new ArrayList<>();
+    private List<Club> clubList = new ArrayList<>();
+    private List<Department> departmentList = new ArrayList<>();
     
-    // We provide getters so MainClass can access them
-    public ArrayList<Student> getStudents() { return studentList; }
-    public ArrayList<Faculty> getFaculties() { return facultyList; }
-    public ArrayList<Course> getCourses() { return courseList; }
-    public ArrayList<Club> getClubs() { return clubList; }
-    public ArrayList<Department> getDepartments() { return departmentList; }
+    public List<Student> getStudents() { 
+        return studentList; 
+    }
+
+    public List<Faculty> getFaculties() { 
+        return facultyList; 
+    }
+
+    public List<Course> getCourses() { 
+        return courseList; 
+    }
+
+    public List<Club> getClubs() { 
+        return clubList; 
+    }
+
+    public List<Department> getDepartments() { 
+        return departmentList; 
+    }
 }

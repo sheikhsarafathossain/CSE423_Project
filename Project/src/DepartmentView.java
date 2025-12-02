@@ -1,7 +1,8 @@
 public class DepartmentView {
-    public void printDepartmentDetails(Department dept) {
+
+    public void printDepartmentDetails(Department department) {
         System.out.println("--- Department Details ---");
-        System.out.println("Department Name: " + dept.getDepartmentName());
-        System.out.println("Total Credit: " + dept.getDepartmentTotalCredit());
+        System.out.println("Department Name: " + department.getName());
+        System.out.println("Total Credit: " + department.getTotalCredit());
     }
 }

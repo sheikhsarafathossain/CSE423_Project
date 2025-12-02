@@ -1,13 +1,15 @@
-public class Club { 
+public class Club {
 
-    private String clubName, clubPosition;
+    private String clubName;
+    private String memberRole;
 
     public Club() {
     }
 
-    public Club(String clubName, String clubPosition) {
+    public Club(String clubName, String memberRole)
+  {
         this.clubName = clubName;
-        this.clubPosition = clubPosition;
+        this.memberRole = memberRole;
     }
 
     public String getClubName() {
@@ -18,11 +20,11 @@ public class Club {
         this.clubName = clubName;
     }
 
-    public String getClubPosition() {
-        return clubPosition;
+    public String getMemberRole() {
+        return memberRole;
     }
 
-    public void setClubPosition(String clubPosition) {
-        this.clubPosition = clubPosition;
+    public void setMemberRole(String memberRole) {
+        this.memberRole = memberRole;
     }
 }
