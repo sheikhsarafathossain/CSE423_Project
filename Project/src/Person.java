@@ -4,7 +4,6 @@ abstract class Person {
     private String name, email;
 
     public Person() {
-         
     }
 
     public Person(int id, String name, String email) {
@@ -36,6 +35,4 @@ abstract class Person {
     public void setEmail(String email) {
         this.email = email;
     }
-
-
 }

@@ -90,7 +90,7 @@ public class MainClass {
                                                             if (Objects.equals(c.getCourseId(), cid)) {
                                                                 // ISP: Student uses .addCourse which calls .enrollCourse
                                                                 // Note: addCourse now checks capacity inside Course.java
-                                                                s.addCourse(c);
+                                                                s.enrollCourse(c);
                                                                 c.addStudent(s);
                                                                 System.out.println("Course enrollment processed.");
                                                                 break;
@@ -111,7 +111,7 @@ public class MainClass {
                                                         String cname = sc.nextLine();
                                                         for (Club c : db.getClubs()) {
                                                             if (Objects.equals(c.getClubName(), cname)) {
-                                                                s.addClub(c);
+                                                                s.joinClub(c);
                                                                 System.out.println("Club added successfully");
                                                                 break;
                                                             }
@@ -130,7 +130,7 @@ public class MainClass {
                                                         System.out.print("Enter Department Name: ");
                                                         String dname = sc.nextLine();
                                                         for (Department d : db.getDepartments()) {
-                                                            if (Objects.equals(d.getDepartmentName(), dname)) {
+                                                            if (Objects.equals(d.getName(), dname)) {
                                                                 s.addDepartment(d);
                                                                 System.out.println("Department added successfully");
                                                                 break;
@@ -244,7 +244,7 @@ public class MainClass {
                                                 sc.nextLine();
                                                 String dname = sc.nextLine();
                                                 for (Department d : db.getDepartments()) {
-                                                    if (Objects.equals(d.getDepartmentName(), dname)) {
+                                                    if (Objects.equals(d.getName(), dname)) {
                                                         departmentView.printDepartmentDetails(d);
                                                     } 
                                                 }
@@ -290,7 +290,7 @@ public class MainClass {
                                             case 'b': {
                                                 for (Student s : db.getStudents()) {
                                                     System.out.println("Student: " + s.getName());
-                                                    for(Department d : s.getDepartmentList()){
+                                                    for(Department d : s.getDepartments()){
                                                         departmentView.printDepartmentDetails(d);
                                                     }
                                                 }
@@ -300,7 +300,7 @@ public class MainClass {
                                                 for (Student s : db.getStudents()) {
                                                     System.out.println("Student: " + s.getName());
                                                     // Accessing CourseManager to get list
-                                                    for(Course c : s.getCourseManager().getCourseList()){
+                                                    for(Course c : s.getCourseManager().getCourses()){
                                                         courseView.printCourseDetails(c);
                                                     }
                                                 }
@@ -309,7 +309,7 @@ public class MainClass {
                                             case 'd': {
                                                 for (Student s : db.getStudents()) {
                                                     System.out.println("Student: " + s.getName());
-                                                    for(ExamResult er : s.getResultList()){
+                                                    for(ExamResult er : s.getExamResults()){
                                                         examResultView.printResultDetails(er);
                                                     }
                                                 }
@@ -318,7 +318,7 @@ public class MainClass {
                                             case 'e': {
                                                 for (Student s : db.getStudents()) {
                                                     System.out.println("Student: " + s.getName());
-                                                    for(Club c : s.getClubList()){
+                                                    for(Club c : s.getClubs()){
                                                         clubView.printClubDetails(c);
                                                     }
                                                 }
@@ -446,7 +446,7 @@ public class MainClass {
                                                         for (Course c : db.getCourses()) {
                                                             if (Objects.equals(c.getCourseId(), cid)) {
                                                                 f.addCourse(c);
-                                                                c.addFaculty(f);
+                                                                c.setFaculty(f);;
                                                                 System.out.println("Course added to Faculty.");
                                                                 break;
                                                             }
@@ -485,7 +485,7 @@ public class MainClass {
                                                         System.out.print("Enter Department Name: ");
                                                         String dname = sc.nextLine();
                                                         for(Department d : db.getDepartments()){
-                                                            if(Objects.equals(d.getDepartmentName(), dname)){
+                                                            if(Objects.equals(d.getName(), dname)){
                                                                 f.addDepartment(d);
                                                                 System.out.println("Department added to Faculty");
                                                                 break;
@@ -515,10 +515,10 @@ public class MainClass {
 
                                                 for (Course c : db.getCourses()) {
                                                     if (Objects.equals(c.getCourseId(), cid)) {
-                                                        c.addMarks(newResult);
+                                                        c.addExamResult(newResult);
                                                         for(Student s : db.getStudents()) {
                                                             if(s.getId() == sid) {
-                                                                s.addExamMarks(newResult);
+                                                                s.addExamResult(newResult);
                                                                 System.out.println("Marks added.");
                                                                 break;
                                                             }
