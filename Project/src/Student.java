@@ -15,11 +15,17 @@ public class Student extends Person {
     public Student() {
     }
 
+    public Student(int id, String name, String email, double studentCGPA) {
+        super(id, name, email);
+        this.studentCGPA = studentCGPA;
+    }
+
     public Student(int id, String name, String email, double studentCGPA, CourseManager cm) {
         super(id, name, email);
         this.studentCGPA = studentCGPA;
         this.courseManager = cm; 
     }
+
 
     public double getStudentCGPA() {
         return studentCGPA;
