@@ -69,7 +69,14 @@ public class MainClass {
                                                 
                                                 CourseManager cm = new CourseManager();
 
-                                                db.getStudents().add(new Student(sid, sname, semail, scgpa, cm));
+                                                Student s = new Student.StudentBuilder()
+                                                .setId(sid)
+                                                .setName(sname)
+                                                .setEmail(semail)
+                                                .setStudentCGPA(scgpa)
+                                                .setCourseManager(cm)
+                                                .build();
+                                                db.getStudents().add(s);
                                                 
                                                 System.out.println("Student Added Successfully!");
                                                 break;
@@ -381,7 +388,15 @@ public class MainClass {
 
                                                 CourseManager cm = new CourseManager();
                                                 
-                                                db.getFaculties().add(new Faculty(fid, fname, femail, fpos, fload, cm));
+                                                Faculty f = new Faculty.FacultyBuilder()
+                                                .setId(fid)
+                                                .setName(fname)
+                                                .setEmail(femail)
+                                                .setPosition(fpos)
+                                                .setMaxCourseLoad(fload)
+                                                .setCourseManager(cm)
+                                                .build();
+                                                db.getFaculties().add(f);
                                                 System.out.println("Faculty Added Successfully!");
                                                 break;
                                             }

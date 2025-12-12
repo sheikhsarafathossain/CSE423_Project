@@ -20,6 +20,49 @@ public class Faculty extends Person {
         this.courseManager = courseManager;
     }
 
+    public static class FacultyBuilder {
+        private int id;
+        private String name;
+        private String email;
+        private String position;
+        private int maxCourseLoad;
+        private CourseManager courseManager;
+
+        public FacultyBuilder setId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public FacultyBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public FacultyBuilder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public FacultyBuilder setPosition(String position) {
+            this.position = position;
+            return this;
+        }
+
+        public FacultyBuilder setMaxCourseLoad(int maxCourseLoad) {
+            this.maxCourseLoad = maxCourseLoad;
+            return this;
+        }
+
+        public FacultyBuilder setCourseManager(CourseManager courseManager) {
+            this.courseManager = courseManager;
+            return this;
+        }
+
+        public Faculty build() {
+            return new Faculty(id, name, email, position, maxCourseLoad, courseManager);
+        }
+    }
+
     public String getPosition() {
         return position;
     }
