@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class MainClass {
@@ -7,17 +6,14 @@ public class MainClass {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        
         UniversityData db = UniversityData.getInstance();
-        
-        ArrayList<ExamResult> resultList = new ArrayList<ExamResult>(); 
-
-        StudentView studentView = new StudentView();
-        FacultyView facultyView = new FacultyView();
-        CourseView courseView = new CourseView();
-        ClubView clubView = new ClubView();
-        DepartmentView departmentView = new DepartmentView();
-        ExamResultView examResultView = new ExamResultView();
+        UniversityUIFactory uiFactory = new ConsoleUIFactory(); 
+        StudentView studentView = uiFactory.createStudentView();
+        FacultyView facultyView = uiFactory.createFacultyView();
+        CourseView courseView = uiFactory.createCourseView();
+        ClubView clubView = uiFactory.createClubView();
+        DepartmentView departmentView = uiFactory.createDepartmentView();
+        ExamResultView examResultView = uiFactory.createExamResultView();
 
         try {
             boolean res = true;
@@ -513,7 +509,7 @@ public class MainClass {
                                                 double finall = sc.nextDouble();
                                                 
                                                 ExamResult newResult = new ExamResult(cid, mid1, mid2, finall);
-                                                resultList.add(newResult);
+                                                examResultView.printResultDetails(newResult);
 
                                                 for (Course c : db.getCourses()) {
                                                     if (Objects.equals(c.getCourseId(), cid)) {
@@ -623,5 +619,6 @@ public class MainClass {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
+        sc.close(); 
     }
 }
