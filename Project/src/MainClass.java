@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class MainClass {
@@ -7,19 +6,14 @@ public class MainClass {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        // 1. Initialize Database (SRP)
-        UniversityData db = new UniversityData();
-        
-        // Transaction log for results (Optional, but kept from your original code)
-        ArrayList<ExamResult> resultList = new ArrayList<ExamResult>(); 
-
-        // 2. Initialize Views (SRP)
-        StudentView studentView = new StudentView();
-        FacultyView facultyView = new FacultyView();
-        CourseView courseView = new CourseView();
-        ClubView clubView = new ClubView();
-        DepartmentView departmentView = new DepartmentView();
-        ExamResultView examResultView = new ExamResultView();
+        UniversityData db = UniversityData.getInstance();
+        UniversityUIFactory uiFactory = new ConsoleUIFactory(); 
+        StudentView studentView = uiFactory.createStudentView();
+        FacultyView facultyView = uiFactory.createFacultyView();
+        CourseView courseView = uiFactory.createCourseView();
+        ClubView clubView = uiFactory.createClubView();
+        DepartmentView departmentView = uiFactory.createDepartmentView();
+        ExamResultView examResultView = uiFactory.createExamResultView();
 
         try {
             boolean res = true;
@@ -61,7 +55,7 @@ public class MainClass {
                                             case 'a': {
                                                 System.out.print("Enter Student ID: ");
                                                 int sid = sc.nextInt();
-                                                sc.nextLine(); // consume newline
+                                                sc.nextLine(); 
                                                 System.out.print("Enter Student Name: ");
                                                 String sname = sc.nextLine();
                                                 System.out.print("Enter Student Email:");
@@ -69,11 +63,16 @@ public class MainClass {
                                                 System.out.print("Enter Student CGPA: ");
                                                 double scgpa = sc.nextDouble();
                                                 
-                                                // DIP FIX: Create the tool (CourseManager) first!
                                                 CourseManager cm = new CourseManager();
 
-                                                // Inject it into the Student
-                                                db.getStudents().add(new Student(sid, sname, semail, scgpa, cm));
+                                                Student s = new Student.StudentBuilder()
+                                                .setId(sid)
+                                                .setName(sname)
+                                                .setEmail(semail)
+                                                .setStudentCGPA(scgpa)
+                                                .setCourseManager(cm)
+                                                .build();
+                                                db.getStudents().add(s);
                                                 
                                                 System.out.println("Student Added Successfully!");
                                                 break;
@@ -88,8 +87,6 @@ public class MainClass {
                                                         String cid = sc.nextLine();
                                                         for (Course c : db.getCourses()) {
                                                             if (Objects.equals(c.getCourseId(), cid)) {
-                                                                // ISP: Student uses .addCourse which calls .enrollCourse
-                                                                // Note: addCourse now checks capacity inside Course.java
                                                                 s.enrollCourse(c);
                                                                 c.addStudent(s);
                                                                 System.out.println("Course enrollment processed.");
@@ -172,7 +169,7 @@ public class MainClass {
                                                             int sid = sc.nextInt();
                                                             if (Objects.equals(s.getId(), sid)) {
                                                                 c.dropStudent(sid);
-                                                                s.dropCourse(cid); // Uses ISP dropCourse
+                                                                s.dropCourse(cid); 
                                                                 System.out.println("Dropped Successfully!");
                                                                 break;
                                                             }
@@ -194,7 +191,7 @@ public class MainClass {
                                     break;
                                 }
 
-                                case 'c': { // Search Menu
+                                case 'c': { 
                                     boolean sp = true;
                                     while (sp) {
                                         System.out.println("a. Search Course: ");
@@ -222,7 +219,6 @@ public class MainClass {
                                                 int fid = sc.nextInt();
                                                 for (Faculty f : db.getFaculties()) {
                                                     if (fid == f.getId()) {
-                                                        // SRP: Use View
                                                         facultyView.printFacultyDetails(f);
                                                     } 
                                                 }
@@ -257,7 +253,6 @@ public class MainClass {
                                                 for (Course c : db.getCourses()) {
                                                     if (cname.equals(c.getCourseId())) {
                                                         System.out.println("Course found: " + cname);
-                                                        // Note: Detailed result search logic depends on implementation
                                                     } 
                                                 }
                                                 break;
@@ -299,7 +294,6 @@ public class MainClass {
                                             case 'c': {
                                                 for (Student s : db.getStudents()) {
                                                     System.out.println("Student: " + s.getName());
-                                                    // Accessing CourseManager to get list
                                                     for(Course c : s.getCourseManager().getCourses()){
                                                         courseView.printCourseDetails(c);
                                                     }
@@ -384,16 +378,21 @@ public class MainClass {
                                                 System.out.print("Enter Faculty Position: ");
                                                 String fpos = sc.nextLine();
                                                 
-                                                // OCP: Ask for Limit
                                                 System.out.print("Enter Max Course Load (e.g. 3): ");
                                                 int fload = sc.nextInt();
                                                 sc.nextLine();
 
-                                                // DIP: Create Manager first
                                                 CourseManager cm = new CourseManager();
                                                 
-                                                // Create Faculty with all inputs
-                                                db.getFaculties().add(new Faculty(fid, fname, femail, fpos, fload, cm));
+                                                Faculty f = new Faculty.FacultyBuilder()
+                                                .setId(fid)
+                                                .setName(fname)
+                                                .setEmail(femail)
+                                                .setPosition(fpos)
+                                                .setMaxCourseLoad(fload)
+                                                .setCourseManager(cm)
+                                                .build();
+                                                db.getFaculties().add(f);
                                                 System.out.println("Faculty Added Successfully!");
                                                 break;
                                             }
@@ -406,7 +405,6 @@ public class MainClass {
                                                 System.out.print("Enter Course Credit: ");
                                                 double cc = sc.nextDouble();
                                                 
-                                                // OCP FIX: Now we ask for Capacity and pass it to Constructor
                                                 System.out.print("Enter Student Capacity: ");
                                                 int ccap = sc.nextInt();
                                                 sc.nextLine();
@@ -511,7 +509,7 @@ public class MainClass {
                                                 double finall = sc.nextDouble();
                                                 
                                                 ExamResult newResult = new ExamResult(cid, mid1, mid2, finall);
-                                                resultList.add(newResult);
+                                                examResultView.printResultDetails(newResult);
 
                                                 for (Course c : db.getCourses()) {
                                                     if (Objects.equals(c.getCourseId(), cid)) {
@@ -621,5 +619,6 @@ public class MainClass {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
+        sc.close(); 
     }
 }

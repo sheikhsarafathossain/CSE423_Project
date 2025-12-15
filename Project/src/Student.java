@@ -6,11 +6,9 @@ public class Student extends Person {
     private double studentCGPA;
     private CourseManager courseManager; 
     
-    private List<ExamResult> examResults = new  
-    ArrayList<>();
+    private List<ExamResult> examResults = new ArrayList<>();
     private List<Club> clubs = new ArrayList<>();
-    private List<Department> departments = new 
-    ArrayList<>();
+    private List<Department> departments = new ArrayList<>();
 
     public Student() {
     }
@@ -20,6 +18,45 @@ public class Student extends Person {
         this.studentCGPA = studentCGPA;
         this.courseManager = cm; 
     }
+
+    public static class StudentBuilder {
+        private int id;
+        private String name;
+        private String email;
+        private double studentCGPA;
+        private CourseManager courseManager;
+
+        public StudentBuilder setId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public StudentBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public StudentBuilder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public StudentBuilder setStudentCGPA(double studentCGPA) {
+            this.studentCGPA = studentCGPA;
+            return this;
+        }
+
+        public StudentBuilder setCourseManager(CourseManager courseManager) {
+            this.courseManager = courseManager;
+            return this;
+        }
+
+        public Student build() {
+            return new Student(id, name, email, studentCGPA, courseManager);
+        }
+    }
+    
+    
 
     public double getStudentCGPA() {
         return studentCGPA;
