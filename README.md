@@ -1,182 +1,71 @@
-# SOLID Principles Refactoring – SOLID Branch
+Implementation of SOLID Principles
 
-## Overview
+S - Single Responsibility Principle (SRP)
 
-This branch contains the **SOLID-principle–compliant refactoring** of the original project.  
-The goal of this refactor was to improve **code quality, maintainability, extensibility, and testability** by strictly applying all five **SOLID principles**.
+The Problem:
 
-All business logic, domain models, persistence, presentation, and application bootstrapping responsibilities have been **clearly separated**, while preserving the core functionality of the original system.
+My entity classes were violating SRP by handling multiple distinct tasks. For example, ExamResult.java was not only storing grades but also managing a list of courses. Similarly, Student.java contained System.out.println statements, meaning a change in UI requirements would force me to open and modify a backend data class.
 
----
+The Solution:
 
-## Purpose of This Branch
+I decoupled the codebase by assigning single responsibilities:
 
-- Apply **all five SOLID principles** correctly  
-- Remove tight coupling and large responsibility-heavy classes  
-- Improve readability and future extensibility  
-- Demonstrate proper **object-oriented design** practices  
-- Meet the instructor’s refactoring and documentation requirements  
+UI Separation: I removed all display() methods from the entities. I created dedicated "View" classes (e.g., StudentView, ClubView) solely responsible for formatting and printing data.
 
-> **Note:**  
-> This branch only contains the **SOLID-applied implementation**.  
-> The original implementation remains unchanged in the main / previous branch.
+Logic Isolation: I moved the data storage lists out of MainClass and into a dedicated UniversityData class, which now acts as the single source of truth for the system's state.
 
----
+Data Purity: I stripped ExamResult of unrelated logic, ensuring it serves only as a data packet for exam scores.
 
-## Project Structure (After Refactoring)
+O - Open/Closed Principle (OCP)
 
-```text
-solid_refactor/
-│
-├── app/
-│   └── MainApp.java
-│
-├── model/
-│   ├── Person.java
-│   ├── Student.java
-│   ├── Faculty.java
-│   ├── Course.java
-│   ├── Department.java
-│   ├── Club.java
-│   └── ExamResult.java
-│
-├── repo/
-│   ├── CourseRepository.java
-│   └── InMemoryCourseRepository.java
-│
-├── service/
-│   ├── CourseService.java
-│   ├── GradeStrategy.java
-│   └── StandardGradeStrategy.java
-│
-├── ui/
-│   └── CoursePrinter.java
-│
-└── originals/
-    └── (Original files preserved for comparison)
-```
-## SOLID Principles Application
+The Problem:
 
----
+The system was not "Closed for Modification." If the university decided to change the maximum capacity of a course from 40 to 60, I would have to modify the source code of the Course class and recompile the application.
 
-## 1. Single Responsibility Principle (SRP)
+The Solution:
 
-**Definition:**  
-A class should have **only one reason to change**.
+I made the system "Open for Extension" by introducing dynamic configuration:
 
-### What Was Done
+Dynamic Capacity: I modified the Course constructor to accept a capacity integer. This allows me to create different course instances with different limits (e.g., a Lab with 20 seats vs. a Theory class with 100) without ever touching the Course class code again.
 
-- Domain classes (`Student`, `Course`, `Faculty`, etc.) now **only store data**
-- Business logic moved into **service classes**
-- Printing and output logic moved into **UI classes**
-- Persistence logic separated into **repository classes**
+Configurable Faculty Load: Similarly, I added a maxCourseLoad attribute to the Faculty class, allowing dynamic assignment limits per professor.
 
-### Example
+L - Liskov Substitution Principle (LSP)
 
-- `CourseService` → handles course-related business logic  
-- `CoursePrinter` → handles displaying courses  
-- `CourseRepository` → handles data storage  
+The Problem:
 
-This ensures that changes in UI, persistence, or business rules do not affect each other.
+I needed to ensure that Student and Faculty entities could be treated interchangeably where appropriate (e.g., in a general "Person" search), without causing runtime errors or requiring complex if-else checks.
 
----
+The Solution:
 
-## 2. Open/Closed Principle (OCP)
+I introduced an abstract base class, Person, containing shared attributes like id, name, and email. Both Student and Faculty extend this class. This ensures that any component designed to handle a Person can seamlessly process both students and faculty members, adhering to strict polymorphism.
 
-**Definition:**  
-Classes should be **open for extension** but **closed for modification**.
+I - Interface Segregation Principle (ISP)
 
-### What Was Done
+The Problem:
 
-- Introduced the `GradeStrategy` interface
-- Implemented `StandardGradeStrategy` as one grading rule
-- New grading rules can be added **without modifying existing code**
+A generic "UserActions" interface would have forced users to implement methods irrelevant to their role. For instance, a Student does not need an assignCourse() method (which is a Faculty task), and a Faculty member does not need an enrollCourse() method.
 
-### Example
+The Solution:
 
-```java
-public interface GradeStrategy {
-    String grade(ExamResult r);
-}
-```
-To add a new grading system, only a new class implementing GradeStrategy is needed.
+I split the behaviors into role-specific interfaces:
 
-## 3. Liskov Substitution Principle (LSP)
+StudentActions Interface: Defines enrollCourse() and dropCourse().
 
-**Definition:**  
-Objects of a superclass should be replaceable with objects of its subclasses **without breaking the system**.
+FacultyActions Interface: Defines assignCourse() and withdrawCourse().
 
-### What Was Done
+CourseManager Implementation: The manager implements both interfaces, but the Student class only interacts with the StudentActions methods, ensuring they are never exposed to irrelevant functionality.
 
-- `Student` and `Faculty` correctly extend `Person`
-- No overridden methods violate expected behavior
-- Subclasses do not weaken or change base class contracts
+D - Dependency Inversion Principle (DIP)
 
-### Result
+The Problem:
 
-Any method that works with `Person` can safely work with `Student` or `Faculty`.
+My high-level modules (like Student) were dependent on low-level modules (like CourseManager) by directly instantiating them (new CourseManager()). This created a rigid dependency chain.
 
----
+The Solution:
 
-## 4. Interface Segregation Principle (ISP)
+I implemented Dependency Injection:
 
-**Definition:**  
-Clients should not be forced to depend on methods they do not use.
+Instead of the Student creating the CourseManager, the manager is created in the MainClass (the entry point) and passed into the Student constructor.
 
-### What Was Done
-
-- Large “manager” responsibilities were broken into **small, focused interfaces**
-- `CourseRepository` only contains persistence-related methods
-- Services depend only on the interfaces they actually require
-
-### Benefit
-
-Classes remain lightweight and easy to understand, implement, and test.
-
----
-
-## 5. Dependency Inversion Principle (DIP)
-
-**Definition:**  
-High-level modules should depend on **abstractions**, not concrete implementations.
-
-### What Was Done
-
-- `CourseService` depends on `CourseRepository` interface
-- Concrete implementation (`InMemoryCourseRepository`) is injected
-- `MainApp` handles object creation and dependency wiring
-
-### Example
-
-```java
-public CourseService(CourseRepository repository) {
-    this.repository = repository;
-}
-```
-This allows switching storage mechanisms (file, database, API) without modifying business logic
-
-## Overall Improvements Achieved
-
-- Clear separation of concerns across domain models, services, repositories, and UI components  
-- Reduced tight coupling between classes through interface-based design  
-- Improved code readability and maintainability  
-- Easier extensibility for future features (new grading strategies, repositories, reports)  
-- Better testability due to dependency injection and modular components  
-- Elimination of large, responsibility-heavy classes  
-- Proper adherence to all five SOLID principles  
-
----
-
-## Branch Purpose – With_SOLID
-
-The **With_SOLID** branch contains the fully refactored version of the project where **all SOLID principles have been correctly applied**.
-
-This branch was created to:
-
-- Demonstrate the practical application of SOLID principles in a real Java project  
-- Improve overall software design quality and architecture  
-- Serve as a clean, maintainable, and extensible version of the system  
-- Provide a clear comparison against the original implementation  
-- Fulfill academic requirements for code refactoring and documentation  
-
-The original, non-refactored implementation is preserved in the without_solid branch for reference and comparison.
+This "inverts" the control. The Student class now relies on an abstraction (the injected object) rather than a concrete implementation it creates itself. This makes the codebase significantly easier to test and maintain.
