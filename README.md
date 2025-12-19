@@ -58,51 +58,8 @@ In a university management system, **there must be exactly one shared data store
 
 ---
 
-## 2. Facade Pattern  
-**Class:** `UniversityFacade`
 
-### Why It Was Implemented
-
-Before introducing the Facade:
-- Client code had to interact with many classes directly  
-- Adding a student or enrolling a course required multiple steps  
-- Business logic was scattered and hard to follow  
-
-This made the system:
-- Hard to use  
-- Hard to maintain  
-- Error-prone for clients  
-
-### How It Was Implemented
-
-`UniversityFacade` provides **simple, high-level methods** such as:
-- `addStudent(...)`  
-- `addFaculty(...)`  
-- `addCourse(...)`  
-- `enrollStudentInCourse(...)`  
-- `assignFacultyToCourse(...)`  
-
-Internally, it coordinates:
-- `UniversityData`  
-- `CourseMediator`  
-- Builder objects for entity creation  
-
-### How It Improves the Previous Code
-
-- Client code interacts with **one single entry point**  
-- Complex workflows are hidden behind simple methods  
-- Reduces dependency on internal system details  
-
-### Key Benefits of Facade Here
-
-- Simplifies system usage  
-- Hides internal complexity  
-- Reduces coupling between client and subsystems  
-- Improves readability of high-level logic  
-
----
-
-## 3. Builder Pattern  
+## 2. Builder Pattern  
 **Classes:**  
 - `Student.StudentBuilder`  
 - `Faculty.FacultyBuilder`  
@@ -163,7 +120,7 @@ Student student = new Student.StudentBuilder()
 
 ---
 
-## 4. Mediator Pattern  
+## 3. Mediator Pattern  
 **Class:** `CourseMediator`
 
 ### Why It Was Implemented
@@ -209,7 +166,7 @@ This resulted in:
 
 ---
 
-## 5. Abstract Factory Pattern  
+## 4. Abstract Factory Pattern  
 
 **Classes:**  
 - `UniversityUIFactory`  
